@@ -19,9 +19,13 @@ int list_insert_at(node_st *p, int pos, type data){
     node_st *curr = p;    
     int j = 0;
 
-    while (curr->next != NULL && j < pos) {
-        curr = curr->next;
-        j++;
+    while (curr->next != NULL) {
+        if (j < pos) {
+            j ++;
+            curr = curr->next;
+        }else {
+            break;
+        }
     }
 
     node_st *new_node = malloc(sizeof(*new_node));
@@ -35,7 +39,13 @@ int list_insert_at(node_st *p, int pos, type data){
     } 
 
 }
-//int list_order_insert(node_st *p, type data){}
+int list_order_insert(node_st *p, type data){
+    if (p == NULL)
+        return  -1;
+        
+
+    return 0; 
+}
 // int list_delete_at(node_st *p, int pos, type *data){}
 // int list_delet(node_st *p, type data){}
 // int list_isempty(node_st *p){}
@@ -43,10 +53,14 @@ void list_display(node_st *p){
     if (p == NULL)
         return;
 
-    for (node_st *curr = p->next; curr->next != NULL; curr = curr->next) {
-        printf("%6d", curr->data);        
+    node_st *curr = p;
+
+    while (curr->next != NULL) {
+        curr = curr->next;
+        printf("%6d", curr->data);
     }
     printf("\n");
+
 }
 // void list_destroy(node_st *p){}
 
