@@ -11,10 +11,10 @@ typedef struct node_st{
 
 node_st * list_create();
 int list_insert_at(node_st *, int , type);
-int list_order_insert(node_st *, type);
+int list_order_insert(node_st *, type);       //左插升序     
 int list_delete_at( node_st *, int, type *);
 int list_delet(node_st *, type);
-int list_isempty(node_st *);
+int list_setempty(node_st *);
 void list_display(node_st *);
 void list_destroy(node_st *);
 
