@@ -3,7 +3,7 @@
 #include "list.h"
 
 
-#define NAMESIZE 1024
+#define NAMESIZE 32
 
 typedef struct{
     int id;
@@ -12,39 +12,74 @@ typedef struct{
     int chinese;
 }score_st;
  
-void print_s(const void *rv){
-    const score_st *r = rv;
-    printf("%d %s %d %d\n", r->id, r->name, r->math, r->chinese);
+static void print_s(const void *ptr){
+   const score_st *cur = ptr;
+   printf("%d %s %d %d\n", cur->id, cur->name, cur->math, cur->chinese);
+}
+
+static int  id_cmp(const void *key, const void *record){
+    const int *k = key;
+    const score_st *r = record;
+    return ( *k - r->id );
 }
 
 
 
+
+
 int main(){
-    
 
-    llist_st *handler = llist_create(FORWARD);
-    if (handler == NULL) exit(1); 
+    llist_st *user_list = llist_create(sizeof(score_st));        
 
 
-    score_st tmp;
-
-    int ret ;
-
-    for (int i = 0; i < 8; i++) {
-        tmp.id = i;
-        snprintf(tmp.name, handler->size, "stu%d", i);
-        tmp.math = rand()%100;
-        tmp.chinese = rand()%100;
-        ret = llist_insert(handler, &tmp, FORWARD);
-        if (ret) exit(1);
+    for (int j = 0; j < 8; j++){
+        score_st tmp;
+        tmp.id = j;
+        snprintf(tmp.name, NAMESIZE, "stu%d", j);
+        tmp.math = rand() % 100;
+        tmp.chinese =rand() % 100;
+        int ret = llist_insert(user_list, &tmp, BACKWARD);
+        if (ret) printf("error\n");
     }
 
+
+    llist_show(user_list, print_s);
+
+    printf("\n\n\n");
+
+
+    int id  = 3;
     
-    llist_show(handler, print_s);
+    score_st *score_st_ret = NULL ;
+    #if 0
+    score_st_ret = llist_find(user_list, &id, id_cmp);
+    if (score_st_ret == NULL) printf("Can not find!!!\n");
+    else print_s(score_st_ret);
 
-    llist_destroy(handler);
+
+    #else 
+    printf("\n\n\n");
+    score_st ret_data; score_st_ret = &ret_data;
+    llist_fetch(user_list, &id, id_cmp, score_st_ret);
+    print_s(score_st_ret);
+    #endif
 
 
+
+
+    // llist_delete(user_list, &id, id_cmp);
+
+    // llist_show(user_list, print_s);
+
+
+
+    printf("\n\n\n");
+  
+
+
+    llist_destroy(user_list);
+
+    user_list = NULL;
 
     exit(0);
 }

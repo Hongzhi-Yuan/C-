@@ -1,12 +1,14 @@
 #ifndef LIST_H__
 #define LIST_H__
 
-#include <stdlib.h>
+
 
 #define FORWARD 1
 #define BACKWARD 2
 
 typedef void llist_op(const void *);
+typedef int llist_cmp(const void *, const void *);
+
 
 typedef struct  node_st{
     void *data;
@@ -21,18 +23,16 @@ typedef struct llist_st{
 
 
 
-
-
 llist_st * llist_create(int initsize);
 
 int  llist_insert(llist_st *p, const void *data, int mode);
 
 
-//llist_find();
+void * llist_find(llist_st *p, const void *key, llist_cmp *cmp);
 
-//llist_delete();
+int llist_delete(llist_st *p, const void *key, llist_cmp *cmp);
 
-//llist_fetch();
+int  llist_fetch(llist_st *p, const void *key, llist_cmp *cmp, void *back);
 
 void llist_show(llist_st *p, llist_op);
 
