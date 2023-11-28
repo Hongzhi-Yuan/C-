@@ -2,7 +2,11 @@
 #include "stdio.h"
 #include "string.h"
 #include "list.h"
-#include <sys/types.h>
+
+
+
+int  llist_insert(llist_st *p, const void *data, int mode);
+void llist_show(llist_st *p, llist_op);
 
 
 llist_st * llist_create(int initsize){
@@ -14,6 +18,8 @@ llist_st * llist_create(int initsize){
     ptr->head.next = &ptr->head;
     ptr->head.prev = &ptr->head;
 
+    ptr->insert = llist_insert;
+    ptr->show = llist_show;
     return ptr;
 }
 
