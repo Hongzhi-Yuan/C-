@@ -10,7 +10,7 @@ llist_st * llist_create(int initsize){
     if (ptr == NULL) return  NULL;
 
     ptr->size = initsize;
-    ptr->head.data = NULL;
+    
     ptr->head.next = &ptr->head;
     ptr->head.prev = &ptr->head;
 
@@ -23,12 +23,8 @@ int  llist_insert(llist_st *p, const void *data, int mode){
 
     llist_st *cur = p;
     
-    node_st *new_node = malloc(sizeof(*new_node));
+    node_st *new_node = malloc(sizeof(*new_node) + p->size);
     if (new_node == NULL) return -3; 
-
- 
-    new_node->data = malloc(p->size);
-    if (new_node->data == NULL) return -4; 
 
     
     memcpy(new_node->data, data, cur->size);
@@ -64,10 +60,13 @@ static node_st *find_(llist_st *ptr, const void *key, llist_cmp *cmp){
 
 void * llist_find(llist_st *p, const void *key, llist_cmp *cmp){
 
-    return  find_(p, key, cmp)->data;
-    
-}
 
+    node_st * node =  find_(p, key, cmp);
+
+    if (node == &p->head) return  NULL;
+
+    return node->data;
+}
 
 
 void llist_show(llist_st *p, llist_op *op){
@@ -91,7 +90,6 @@ int llist_delete(llist_st *p, const void *key, llist_cmp *cmp){
 
     node->prev->next = node->next;
     node->next->prev = node->prev;
-    free(node->data);
     free(node);
 
     return 0;
@@ -107,7 +105,6 @@ int  llist_fetch(llist_st *p, const void *key, llist_cmp *cmp, void *back){
     node->next->prev = node->prev;
     memcpy(back, node->data, p->size);
 
-    free(node->data);
     free(node);
     return 0;
 }
@@ -120,7 +117,6 @@ void  llist_destroy(llist_st *ptr){
     do {
        cur->head.next = cur->head.next->next;
        cur->head.next->prev = &cur->head;
-       free(cur->head.next->data);
        free(cur->head.next); 
     }while (cur!=ptr); 
 
